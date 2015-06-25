@@ -1,6 +1,6 @@
 {
   "name": "generate-js-bindings",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A data binding layer for Generate JS.",
   "main": "bindings.js",
   "scripts": {
@@ -24,6 +24,6 @@
   },
   "homepage": "https://github.com/Mike96Angelo/Generate-JS-Bindings#readme",
   "dependencies": {
-    "generate-js-events": "^2.1.0"
+    "generate-js-events": "^2.1.1"
   }
 }
