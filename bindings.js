@@ -1,24 +1,41 @@
 var EventEmitter = require('generate-js-events');
 
+/**
+ * A type assert method.
+ * @param  {Any} variable
+ * @param  {String} type
+ * @return {void}
+ */
 function assertType(variable, type) {
     if (typeof variable !== type) {
         throw new Error('Expected ' + type + ' but found ' + typeof variable);
     }
 }
 
-var Bindable = EventEmitter.generate(function Bindable(data) {
-    var _ = this;
+var Bindable = EventEmitter.generate(
+    /**
+     * [Bindable description]
+     * @param {Object} data
+     */
+    function Bindable(data) {
+        var _ = this;
 
-    _.defineProperties({
-        _data: {}
-    });
+        _.defineProperties({
+            _data: {}
+        });
 
-    for (var key in data) {
-        _._data[key] = data[key];
+        for (var key in data) {
+            _._data[key] = data[key];
+        }
     }
-});
+);
 
 Bindable.definePrototype({
+    /**
+     * [get description]
+     * @param  {String} property
+     * @return {Any}
+     */
     get: function get(property) {
         var _ = this;
 
@@ -29,6 +46,13 @@ Bindable.definePrototype({
 
         return _._data[property];
     },
+
+    /**
+     * [set description]
+     * @param {String} property
+     * @param {Any} newValue
+     * @param {Object} changer
+     */
     set: function set(property, newValue, changer) {
         changer = typeof changer === 'object' ? changer : null;
 
@@ -45,6 +69,13 @@ Bindable.definePrototype({
         _.change(property, oldValue, newValue, changer);
     },
 
+    /**
+     * [bind description]
+     * @param  {String} property
+     * @param  {Function} listener
+     * @param  {Object} observer
+     * @return {self}
+     */
     bind: function bind(property, listener, observer) {
         assertType(property, 'string');
         assertType(listener, 'function');
@@ -57,7 +88,17 @@ Bindable.definePrototype({
         var value = _.get(property);
 
         listener.call(_, value, value, false);
+
+        return _;
     },
+
+    /**
+     * [bindOnce description]
+     * @param  {String} property
+     * @param  {Function} listener
+     * @param  {Object} observer
+     * @return {self}
+     */
     bindOnce: function bindOnce(property, listener, observer) {
         assertType(property, 'string');
         assertType(listener, 'function');
@@ -67,16 +108,32 @@ Bindable.definePrototype({
 
         _.once(property, listener, observer);
 
-        var onceListener = function onceListener(oldValue, newValue, changer) {
-            _.unbind(property, onceListener);
-            listener.call(_, oldValue, newValue, changer);
-        };
+        var value = _.get(property);
 
-        _.on(property, onceListener, observer);
+        listener.call(_, value, value, false);
+
+        return _;
     },
-    unbind: function unbind(property, listener, Observer) {
-        this.off(property, listener, Observer);
+
+    /**
+     * [unbind description]
+     * @param  {String} [property]
+     * @param  {Function} [listener]
+     * @param  {Object} [observer]
+     * @return {self}
+     */
+    unbind: function unbind(property, listener, observer) {
+        return this.off(property, listener, observer);
     },
+
+    /**
+     * [change description]
+     * @param {String} property
+     * @param {Any} oldValue
+     * @param {Any} newValue
+     * @param {Object} changer
+     * @return {Boolean}
+     */
     change: function change(property, oldValue, newValue, changer) {
         assertType(property, 'string');
         assertType(changer, 'object');
@@ -98,7 +155,7 @@ Bindable.definePrototype({
         }
 
         return true;
-    },
+    }
 });
 
 module.exports = Bindable;
