@@ -1,0 +1,26 @@
+{
+  "name": "generate-js-bindings",
+  "version": "0.0.0",
+  "description": "A data binding layer for Generate JS.",
+  "main": "bindings.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mike96Angelo/Generate-JS-Bindings.git"
+  },
+  "keywords": [
+    "data",
+    "binding",
+    "bindable",
+    "generator",
+    "inheritance"
+  ],
+  "author": "Michaelangelo Jong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mike96Angelo/Generate-JS-Bindings/issues"
+  },
+  "homepage": "https://github.com/Mike96Angelo/Generate-JS-Bindings#readme"
+}
