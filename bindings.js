@@ -87,7 +87,11 @@ Bindable.definePrototype({
 
         var value = _.get(property);
 
+        _.__initial__ = true;
+
         listener.call(_, value, value, false);
+
+        _.__initial__ = false;
 
         return _;
     },
@@ -139,6 +143,8 @@ Bindable.definePrototype({
         assertType(changer, 'object');
 
         var _ = this;
+
+        _.emit('changed', _, property, oldValue, newValue, changer);
 
         var bindings = _.__events[property];
 
