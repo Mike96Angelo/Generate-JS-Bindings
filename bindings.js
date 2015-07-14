@@ -138,13 +138,28 @@ Bindable.definePrototype({
      * @param {Object} changer
      * @return {Boolean}
      */
-    change: function change(property, oldValue, newValue, changer) {
+    change: function change(property, oldValue, newValue, changer, object) {
         assertType(property, 'string');
         assertType(changer, 'object');
 
         var _ = this;
 
-        _.emit('changed', _, property, oldValue, newValue, changer);
+        /**
+         * Creates a closure around the listener 'func' and 'args'.
+         * @param  {Function} func A listener.
+         * @return {Function}      Closure function.
+         */
+        function emitOnFunc(func) {
+            return function () {
+                func.call(_, oldValue, newValue, changer, object);
+            };
+        }
+
+        if (oldValue === newValue) return;
+
+        object = object && typeof object === 'object' ? object : _;
+
+        _.emit('changed', property, oldValue, newValue, changer, object);
 
         var bindings = _.__events[property];
 
@@ -155,8 +170,8 @@ Bindable.definePrototype({
         var length = bindings.length;
 
         for (var i = 0; i < length; i++) {
-            if (bindings[i].observer !== changer) {
-                bindings[i].listener.call(_, oldValue, newValue, changer);
+            if (!changer || bindings[i].observer !== changer) {
+                setTimeout(emitOnFunc(bindings[i].listener), 0);
             }
         }
 
