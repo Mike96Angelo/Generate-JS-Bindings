@@ -138,7 +138,7 @@ Bindable.definePrototype({
      * @param {Object} changer
      * @return {Boolean}
      */
-    change: function change(property, oldValue, newValue, changer, object) {
+    change: function change(property, oldValue, newValue, changer, object, nochaneevent) {
         assertType(property, 'string');
         assertType(changer, 'object');
 
@@ -159,7 +159,9 @@ Bindable.definePrototype({
 
         object = object && typeof object === 'object' ? object : _;
 
-        _.emit('changed', property, oldValue, newValue, changer, object);
+        if (!nochaneevent) {
+            _.emit('changed', property, oldValue, newValue, changer, object);
+        }
 
         var bindings = _.__events[property];
 
