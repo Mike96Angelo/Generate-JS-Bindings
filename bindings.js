@@ -30,6 +30,20 @@ var Bindable = EventEmitter.generate(
     }
 );
 
+function makeGetter(bindable, property) {
+    return function getter() {
+        var _ = this;
+        return bindable.get(property);
+    };
+}
+
+function makeSetter(bindable, property) {
+    return function setter() {
+        var _ = this;
+        return bindable.set(property);
+    };
+}
+
 Bindable.generateGetters = function generateGetter(bindable, descriptor, properties) {
     var getters = {},
         p = properties || descriptor,
@@ -38,15 +52,10 @@ Bindable.generateGetters = function generateGetter(bindable, descriptor, propert
     properties = (p && typeof p === 'object') ? p : {};
     descriptor = (d && typeof d === 'object') ? d : { enumerable: true };
 
-    function makeGetter(property) {
-        return function getter() {
-            var _ = this;
-            return bindable.get(property);
-        };
-    }
-
     for (var i = 0; i < properties.length; i++) {
-        getters[properties[i]] = { get: makeGetter(properties[i]) };
+        getters[properties[i]] = {
+            get: makeGetter(bindable, properties[i])
+        };
     }
 
     bindable.definePrototype(descriptor, getters);
@@ -60,18 +69,31 @@ Bindable.generateSetters = function generateSetter(bindable, descriptor, propert
     properties = (p && typeof p === 'object') ? p : {};
     descriptor = (d && typeof d === 'object') ? d : { enumerable: true };
 
-    function makeSetter(property) {
-        return function setter() {
-            var _ = this;
-            return bindable.set(property);
+    for (var i = 0; i < properties.length; i++) {
+        setters[properties[i]] = {
+            set: makeSetter(bindable, properties[i])
         };
     }
 
+    bindable.definePrototype(descriptor, setters);
+};
+
+Bindable.generateGettersSetters = function generateGetter(bindable, descriptor, properties) {
+    var gettersSetters = {},
+        p = properties || descriptor,
+        d = properties && descriptor;
+
+    properties = (p && typeof p === 'object') ? p : {};
+    descriptor = (d && typeof d === 'object') ? d : { enumerable: true };
+
     for (var i = 0; i < properties.length; i++) {
-        setters[properties[i]] = { set: makeSetter(properties[i]) };
+        gettersSetters[properties[i]] = {
+            get: makeGetter(bindable, properties[i]),
+            set: makeSetter(bindable, properties[i])
+        };
     }
 
-    bindable.definePrototype(descriptor, setters);
+    bindable.definePrototype(descriptor, gettersSetters);
 };
 
 Bindable.definePrototype({
