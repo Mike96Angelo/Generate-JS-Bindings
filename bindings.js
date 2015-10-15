@@ -30,6 +30,50 @@ var Bindable = EventEmitter.generate(
     }
 );
 
+Bindable.generateGetters = function generateGetter(bindable, descriptor, properties) {
+    var getters = {},
+        p = properties || descriptor,
+        d = properties && descriptor;
+
+    properties = (p && typeof p === 'object') ? p : {};
+    descriptor = (d && typeof d === 'object') ? d : { enumerable: true };
+
+    function makeGetter(property) {
+        return function getter() {
+            var _ = this;
+            return bindable.get(property);
+        };
+    }
+
+    for (var i = 0; i < properties.length; i++) {
+        getters[properties[i]] = { get: makeGetter(properties[i]) };
+    }
+
+    bindable.definePrototype(descriptor, getters);
+};
+
+Bindable.generateSetters = function generateSetter(bindable, descriptor, properties) {
+    var setters = {},
+        p = properties || descriptor,
+        d = properties && descriptor;
+
+    properties = (p && typeof p === 'object') ? p : {};
+    descriptor = (d && typeof d === 'object') ? d : { enumerable: true };
+
+    function makeSetter(property) {
+        return function setter() {
+            var _ = this;
+            return bindable.set(property);
+        };
+    }
+
+    for (var i = 0; i < properties.length; i++) {
+        setters[properties[i]] = { set: makeSetter(properties[i]) };
+    }
+
+    bindable.definePrototype(descriptor, setters);
+};
+
 Bindable.definePrototype({
     /**
      * [get description]
