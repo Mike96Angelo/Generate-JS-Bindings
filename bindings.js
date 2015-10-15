@@ -83,7 +83,7 @@ Bindable.generateGettersSetters = function generateGetter(bindable, descriptor, 
         p = properties || descriptor,
         d = properties && descriptor;
 
-    properties = (p && typeof p === 'object') ? p : {};
+    properties = (p && typeof p === 'object') ? p : [];
     descriptor = (d && typeof d === 'object') ? d : { enumerable: true };
 
     for (var i = 0; i < properties.length; i++) {
