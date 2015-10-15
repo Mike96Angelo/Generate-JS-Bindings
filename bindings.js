@@ -30,17 +30,17 @@ var Bindable = EventEmitter.generate(
     }
 );
 
-function makeGetter(bindable, property) {
+function makeGetter(property) {
     return function getter() {
         var _ = this;
-        return bindable.get(property);
+        return _.get(property);
     };
 }
 
-function makeSetter(bindable, property) {
+function makeSetter(property) {
     return function setter() {
         var _ = this;
-        return bindable.set(property);
+        return _.set(property);
     };
 }
 
@@ -54,7 +54,7 @@ Bindable.generateGetters = function generateGetter(bindable, descriptor, propert
 
     for (var i = 0; i < properties.length; i++) {
         getters[properties[i]] = {
-            get: makeGetter(bindable, properties[i])
+            get: makeGetter(properties[i])
         };
     }
 
@@ -71,7 +71,7 @@ Bindable.generateSetters = function generateSetter(bindable, descriptor, propert
 
     for (var i = 0; i < properties.length; i++) {
         setters[properties[i]] = {
-            set: makeSetter(bindable, properties[i])
+            set: makeSetter(properties[i])
         };
     }
 
@@ -88,8 +88,8 @@ Bindable.generateGettersSetters = function generateGetter(bindable, descriptor, 
 
     for (var i = 0; i < properties.length; i++) {
         gettersSetters[properties[i]] = {
-            get: makeGetter(bindable, properties[i]),
-            set: makeSetter(bindable, properties[i])
+            get: makeGetter(properties[i]),
+            set: makeSetter(properties[i])
         };
     }
 
