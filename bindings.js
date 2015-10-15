@@ -38,9 +38,9 @@ function makeGetter(property) {
 }
 
 function makeSetter(property) {
-    return function setter() {
+    return function setter(val) {
         var _ = this;
-        return _.set(property);
+        return _.set(property, val);
     };
 }
 
