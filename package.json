@@ -1,6 +1,6 @@
 {
   "name": "generate-js-bindings",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A data binding layer for Generate JS.",
   "main": "bindings.js",
   "scripts": {
