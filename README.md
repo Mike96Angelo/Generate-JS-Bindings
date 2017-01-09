@@ -9,7 +9,7 @@
 
 * [ Bindable ](#event-emitter)
     * [ Inherits: EventEmitter::Generation ](https://github.com/Mike96Angelo/Generate-JS-events#class-generation)
-    * [ Bindable.create() ](#bindable-create)
+    * [ new Bindable() ](#bindable-create)
     * [ Bindable.generate(create) ](#bindable-generate)
     * [ CLass: Generation ](#class-generation)
         * [ Inherits: EventEmitter::Generation ](https://github.com/Mike96Angelo/Generate-JS-events#class-generation)
@@ -32,7 +32,7 @@ $ npm install generate-js-bindings
 ```
 
 <a name="bindable-create"></a>
-## Bindable.create()
+## new Bindable()
 
 * *return*: `Object` A new object that inherits from **Bindable**.
 
